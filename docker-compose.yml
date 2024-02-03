@@ -1,0 +1,47 @@
+version: '3'
+services:
+  customer:
+    build: customer
+    depends_on:
+      data_bd:
+        condition: service_healthy
+    ports:
+      - 8080:8080
+    networks:
+      - spring-postgres
+  
+  account:
+    build: account
+    depends_on:
+      data_bd:
+        condition: service_healthy
+    ports:
+      - 8081:8081
+    networks:
+      - spring-postgres
+  
+  data_bd:
+    image: postgres:12.2
+    container_name: data_bd
+    restart: always
+    volumes:
+      - ./data_bd/script.sql:/docker-entrypoint-initdb.d/script.sql
+    networks:
+      - spring-postgres
+    environment:
+      - POSTGRES_DB=${DB}
+      - POSTGRES_USER=${POSTGRESUSER}
+      - POSTGRES_PASSWORD=${POSTGRESPASSWORD}
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+networks:
+  spring-postgres:
+volumes:
+  db-data:
