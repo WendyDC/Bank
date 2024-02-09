@@ -334,3 +334,10 @@ gradle-app.setting
 # -----
 *.hprof
 
+# --- IDE'S ---
+.idea/
+**/reports/
+**/coverage/
+**/**.idea
+**/*.iml
+
