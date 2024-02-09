@@ -336,8 +336,10 @@ gradle-app.setting
 
 # --- IDE'S ---
 .idea/
+.idea/.
 **/reports/
 **/coverage/
 **/**.idea
 **/*.iml
-
+**/**.idea/
+**/**.idea/**/
